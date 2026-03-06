@@ -6,6 +6,7 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import unusedImports from "eslint-plugin-unused-imports";
 import eslintConfigPrettier from "eslint-config-prettier";
+import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 
 export default defineConfig([
   globalIgnores(["dist"]),
@@ -20,6 +21,7 @@ export default defineConfig([
     ],
     plugins: {
       "unused-imports": unusedImports,
+      "better-tailwindcss": betterTailwindcss,
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -30,6 +32,7 @@ export default defineConfig([
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": "warn",
+
       "unused-imports/no-unused-imports": "warn",
       "unused-imports/no-unused-vars": [
         "warn",
@@ -38,6 +41,10 @@ export default defineConfig([
           argsIgnorePattern: "^_",
         },
       ],
+
+      "better-tailwindcss/no-duplicate-classes": "error",
+      "better-tailwindcss/no-unnecessary-whitespace": "warn",
+      "better-tailwindcss/enforce-consistent-class-order": "off",
     },
   },
 ]);
