@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #ffffff;
+  --color-paper: #f0efea;
+  --color-ink: #1f2937;
+  --color-primary: #2f5d83;
+  --color-accent: #fad783;
+  --color-border: #e5e7eb;
+}
+
 @layer base {
   body {
     font-family: sans-serif;
