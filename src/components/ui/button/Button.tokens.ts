@@ -32,4 +32,5 @@ export const buttonVariants = {
   ghost: "bg-transparent text-ink hover:bg-paper hover:text-ink",
   link: "text-primary underline-offset-4 hover:underline",
   background: "bg-background text-primary hover:bg-border",
+  accent: "bg-accent text-ink hover:bg-accent/80",
 } as const;
