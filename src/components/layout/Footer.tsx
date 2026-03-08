@@ -102,7 +102,7 @@ const Footer = () => {
                     {developers.map((dev) => (
                       <div
                         key={dev.name}
-                        className="flex items-center justify-center gap-2 text-sm font-medium text-white/90 md:justify-end"
+                        className="flex items-center justify-center gap-2 text-xs font-medium text-white/90 md:justify-end md:text-sm"
                       >
                         <span>{dev.name}</span>
                         <span className="text-xs text-white/40">(</span>
