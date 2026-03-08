@@ -78,6 +78,30 @@ const wordList = [
     type: "word",
     createdAt: { $date: "2026-03-06T13:56:02.313Z" },
   },
+  {
+    text: "jobs",
+    meaning: "일자리",
+    example: "Many jobs were lost last month.",
+    example_meaning: "지난 달 많은 일자리가 사라졌어요.",
+    type: "word",
+    createdAt: { $date: "2026-03-06T13:56:01.813Z" },
+  },
+  {
+    text: "unemployment",
+    meaning: "실업",
+    example: "The unemployment rate is higher now.",
+    example_meaning: "실업률이 지금 더 높아요.",
+    type: "word",
+    createdAt: { $date: "2026-03-06T13:56:02.113Z" },
+  },
+  {
+    text: "investors",
+    meaning: "투자자들",
+    example: "This news makes investors worried.",
+    example_meaning: "이 소식에 투자자들이 걱정하고 있어요.",
+    type: "word",
+    createdAt: { $date: "2026-03-06T13:56:02.313Z" },
+  },
 ];
 
 const NewsDetailPage = () => {
@@ -180,20 +204,22 @@ const NewsDetailPage = () => {
             </div>
 
             {/* 단어 리스트*/}
-            <div className="hover:[&::-webkit-scrollbar-thumb]:bg-primary/30 flex-1 space-y-4 overflow-y-auto bg-gray-50/50 p-4 pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent">
+            <div className="hover:[&::-webkit-scrollbar-thumb]:bg-primary/30 flex flex-col items-start space-y-4 overflow-y-auto bg-gray-50/50 p-4 pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent">
               {wordList.map((word, index) => (
-                <WordCard
-                  key={index}
-                  text={word.text}
-                  meaning={word.meaning}
-                  example={word.example}
-                  example_meaning={word.example_meaning}
-                  isSelected={false}
-                  type={word.type as "word" | "abbreviation" | "idiom"}
-                  onSelect={() => {}}
-                  newsList={[]}
-                  isDone={false}
-                />
+                <div key={index} className="w-full">
+                  <WordCard
+                    key={index}
+                    text={word.text}
+                    meaning={word.meaning}
+                    example={word.example}
+                    example_meaning={word.example_meaning}
+                    isSelected={false}
+                    type={word.type as "word" | "abbreviation" | "idiom"}
+                    onSelect={() => {}}
+                    newsList={[]}
+                    isDone={false}
+                  />
+                </div>
               ))}
             </div>
           </section>
