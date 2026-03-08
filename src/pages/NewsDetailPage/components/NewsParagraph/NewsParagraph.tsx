@@ -1,11 +1,6 @@
 import { Languages } from "lucide-react";
-import Button from "../../../components/ui/button/Button";
-
-interface NewsParagraphProps {
-  content: string;
-  translated_content: string;
-  index: number;
-}
+import Button from "../../../../components/ui/button/Button";
+import type { NewsParagraphProps } from "./NewsParagraph.types";
 
 const NewsParagraph = ({
   content,

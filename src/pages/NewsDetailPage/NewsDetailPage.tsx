@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import Button from "../../components/ui/button/Button";
-import NewsParagraph from "./components/NewsParagraph";
+import NewsParagraph from "./components/NewsParagraph/NewsParagraph";
 import { BookOpen, Info } from "lucide-react";
 
 const newsJson = {
