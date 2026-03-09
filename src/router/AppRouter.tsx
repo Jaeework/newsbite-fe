@@ -13,7 +13,7 @@ const AppRouter = () => {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<LandingPage />} />
-<<<<<<< syj/15-signin
+        <Route path="/articles" element={<ArticleListPage />} />
       </Route>
       <Route element={<PrivateRoute />}>
         <Route element={<AppLayout />}>
@@ -25,11 +25,6 @@ const AppRouter = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
-=======
-        <Route path="/articles" element={<ArticleListPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
->>>>>>> develop
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
