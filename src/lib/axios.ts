@@ -8,11 +8,15 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
   (request) => {
-    request.headers.authorization = `Bearer ${sessionStorage.getItem("token") ?? ""}`;
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      request.headers.authorization = `Bearer ${token}`;
+    }
     return request;
   },
   (error) => {
