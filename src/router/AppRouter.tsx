@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage/LandingPage";
+import ArticleListPage from "../pages/ArticleListPage/ArticleListPage";
 import AppLayout from "../components/layout/AppLayout";
 
 const AppRouter = () => {
@@ -7,6 +8,7 @@ const AppRouter = () => {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/articles" element={<ArticleListPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
