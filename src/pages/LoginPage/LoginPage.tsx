@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { clearErrors, loginWithEmail } from "../../features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { useState } from "react";
+import Label from "../../components/ui/label/Label";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -51,25 +52,22 @@ const LoginPage = () => {
 
   return (
     <div className="w-full">
-      <div className="shadow-primary/5 border-primary/5 w-full max-w-md border bg-white p-8 shadow-xl md:rounded-xl">
+      <div className="shadow-primary/5 md:border-primary/5 w-full max-w-md bg-white p-8 shadow-xl md:rounded-xl md:p-12">
         <div className="mb-8 text-center">
-          <h2 className="mb-2 text-3xl font-extrabold text-slate-900">
+          <h2 className="text-ink-900 mb-2 text-3xl font-extrabold">
             Welcome Back
           </h2>
-          <p className="text-slate-500">Log in to access your dashboard</p>
+          <p className="text-ink-500">Log in to access your dashboard</p>
         </div>
         {loginError && (
           <span className="text-sm text-red-500">{loginError}</span>
         )}
         <form className="space-y-6" onSubmit={handleSubmit}>
           {fields.map((field) => (
-            <div>
-              <label
-                className="mb-2 block text-sm font-semibold text-slate-700"
-                htmlFor={field.name}
-              >
+            <div key={field.id}>
+              <Label size="sm" htmlFor={field.name}>
                 {field.label}
-              </label>
+              </Label>
               <InputWithIcon
                 leftIcon={field.leftIcon}
                 id={field.id}
@@ -83,34 +81,18 @@ const LoginPage = () => {
             </div>
           ))}
 
-          <div className="flex items-center justify-between text-sm">
-            <label className="group flex cursor-pointer items-center gap-2">
-              <input
-                className="checkbox-custom text-primary focus:ring-primary/20 h-5 w-5 rounded border-slate-300 bg-slate-50 transition-all"
-                type="checkbox"
-              />
-              <span className="text-slate-600 group-hover:text-slate-900">
-                Keep me logged in
-              </span>
-            </label>
-            <Link
-              className="text-primary font-medium underline-offset-4 hover:underline"
-              to="#"
-            >
-              Forgot password?
-            </Link>
-          </div>
           <Button
             size="xl"
             radius="lg"
-            className="shadow-primary/20 w-full transform font-bold shadow-lg transition-all active:scale-[0.98]"
+            isFullWidth
+            className="shadow-primary/20 mt-4 transform font-bold shadow-lg transition-all active:scale-[0.98]"
             type="submit"
           >
             <h1>Log in</h1>
           </Button>
         </form>
         <div className="mt-1 pt-6 text-center">
-          <p className="text-slate-500">
+          <p className="text-ink-500">
             Don't have an account?
             <Link
               className="text-primary ml-1 font-bold underline-offset-4 hover:underline"
@@ -122,10 +104,10 @@ const LoginPage = () => {
         </div>
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
+            <div className="border-ink-200 dark:border-ink-800 w-full border-t"></div>
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-slate-500 dark:bg-slate-900">
+            <span className="text-ink-500 dark:bg-ink-900 bg-white px-2">
               Or continue with
             </span>
           </div>
@@ -136,7 +118,7 @@ const LoginPage = () => {
             size="lg"
             radius="lg"
             isFullWidth
-            className="transition-colors hover:bg-slate-50"
+            className="hover:bg-ink-50 transition-colors"
           >
             <img
               alt=""
