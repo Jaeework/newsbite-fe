@@ -5,15 +5,20 @@ import { BookOpen, Info } from "lucide-react";
 import WordCard from "../MyWordPage/components/WordCard/WordCard";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { fetchNewsDetail } from "../../features/news/newsSlice";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const dispatch = useAppDispatch();
+  const [filter, setFilter] = useState<"word" | "idiom">("word");
 
   const { currentNews, currentWords, currentAbbreviations, isLoading, error } =
     useAppSelector((state) => state.news);
+
+  const filteredWords = useMemo(() => {
+    return currentWords.filter((word) => word.type === filter);
+  }, [currentWords, filter]);
 
   useEffect(() => {
     if (id) {
@@ -113,25 +118,29 @@ const NewsDetailPage = () => {
                   variant="ghost"
                   radius="md"
                   className="text-gray-500"
-                  onClick={() => {}}
+                  onClick={() => {
+                    setFilter("word");
+                  }}
                 >
-                  숙어
+                  단어
                 </Button>
                 <Button
                   size="default"
                   variant="background"
                   radius="md"
                   className="shadow-sm"
-                  onClick={() => {}}
+                  onClick={() => {
+                    setFilter("idiom");
+                  }}
                 >
-                  단어
+                  숙어
                 </Button>
               </div>
             </div>
 
             {/* 단어 리스트*/}
             <div className="hover:[&::-webkit-scrollbar-thumb]:bg-primary/30 flex flex-col items-start space-y-4 overflow-y-auto bg-gray-50/50 p-4 pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent">
-              {currentWords.map((word, index) => (
+              {filteredWords.map((word, index) => (
                 <div key={index} className="w-full">
                   <WordCard
                     key={index}
@@ -140,7 +149,7 @@ const NewsDetailPage = () => {
                     example={word.example}
                     example_meaning={word.example_meaning}
                     isSelected={word.isDone}
-                    type={word.type as "word" | "abbreviation" | "idiom"}
+                    type={word.type}
                     onSelect={() => {}}
                     newsList={[]}
                     isDone={word.isDone}
