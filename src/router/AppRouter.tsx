@@ -4,6 +4,9 @@ import ArticleListPage from "../pages/ArticleListPage/ArticleListPage";
 import AppLayout from "../components/layout/AppLayout";
 import RegisterPage from "../pages/RegisterPage/RegisterPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
+import PrivateRoute from "./PrivateRoute";
+import GuestOnlyRoute from "./GuestOnlyRoute";
+import MyWordPage from "../pages/MyWordPage/MyWordPage";
 
 const AppRouter = () => {
   return (
@@ -11,8 +14,17 @@ const AppRouter = () => {
       <Route element={<AppLayout />}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/articles" element={<ArticleListPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+      </Route>
+      <Route element={<PrivateRoute />}>
+        <Route element={<AppLayout />}>
+          <Route path="/me" element={<MyWordPage />} />
+        </Route>
+      </Route>
+      <Route element={<GuestOnlyRoute />}>
+        <Route element={<AppLayout />}>
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
