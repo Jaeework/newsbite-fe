@@ -5,7 +5,7 @@ import { BookOpen, Info } from "lucide-react";
 import WordCard from "../../components/ui/WordCard/WordCard";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { fetchNewsDetail } from "../../features/news/newsSlice";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,8 +13,17 @@ const NewsDetailPage = () => {
   const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<"word" | "idiom">("word");
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const { currentNews, currentWords, currentAbbreviations, isLoading, error } =
     useAppSelector((state) => state.news);
+
+  const handelFilterChange = (type: "word" | "idiom") => {
+    setFilter(type);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const filteredWords = useMemo(() => {
     return currentWords.filter((word) => word.type === filter);
@@ -115,22 +124,22 @@ const NewsDetailPage = () => {
               <div className="flex rounded-md bg-gray-100 p-1 text-[10px] font-bold">
                 <Button
                   size="default"
-                  variant="ghost"
+                  variant={filter === "word" ? "background" : "ghost"}
                   radius="md"
-                  className="text-gray-500"
+                  className={filter === "word" ? "shadow-sm" : "text-gray-500"}
                   onClick={() => {
-                    setFilter("word");
+                    handelFilterChange("word");
                   }}
                 >
                   단어
                 </Button>
                 <Button
                   size="default"
-                  variant="background"
+                  variant={filter === "idiom" ? "background" : "ghost"}
                   radius="md"
-                  className="shadow-sm"
+                  className={filter === "idiom" ? "shadow-sm" : "text-gray-500"}
                   onClick={() => {
-                    setFilter("idiom");
+                    handelFilterChange("idiom");
                   }}
                 >
                   숙어
@@ -139,7 +148,10 @@ const NewsDetailPage = () => {
             </div>
 
             {/* 단어 리스트*/}
-            <div className="hover:[&::-webkit-scrollbar-thumb]:bg-primary/30 flex flex-col items-start space-y-4 overflow-y-auto bg-gray-50/50 p-4 pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent">
+            <div
+              ref={scrollRef}
+              className="hover:[&::-webkit-scrollbar-thumb]:bg-primary/30 flex flex-col items-start space-y-4 overflow-y-auto bg-gray-50/50 p-4 pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent"
+            >
               {filteredWords.map((word, index) => (
                 <div key={index} className="w-full">
                   <WordCard
