@@ -35,17 +35,30 @@ api.interceptors.response.use(
   async (error: AxiosError<ApiError>) => {
     const originalRequest = error.config as RetryAxiosRequestConfig;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/auth/refresh")
+    ) {
       originalRequest._retry = true;
 
       try {
         const { data } = await api.post("/auth/refresh");
         sessionStorage.setItem("token", data.data.token);
+        window.dispatchEvent(
+          new CustomEvent("refresh:success", {
+            detail: { user: data.data.user },
+          }),
+        );
         originalRequest.headers.authorization = `Bearer ${data.data.token}`;
         return api(originalRequest);
       } catch (error) {
         sessionStorage.removeItem("token");
-        return Promise.reject({});
+        window.dispatchEvent(new CustomEvent("auth:logout"));
+        return Promise.reject({
+          message: "인증이 만료되었습니다",
+          isUserError: false,
+        });
       }
     }
     const data = error.response?.data;
