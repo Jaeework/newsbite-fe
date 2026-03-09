@@ -112,6 +112,23 @@ export const loginWithToken = createAsyncThunk<
   }
 });
 
+export const logOut = createAsyncThunk<void, void, { rejectValue: string }>(
+  "user/logOut",
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post("/auth/signout");
+      sessionStorage.removeItem("token");
+    } catch (error) {
+      if (isApiError(error) && error.isUserError) {
+        return rejectWithValue(
+          error.message || "로그아웃 중 오류가 발생했습니다.",
+        );
+      }
+      return rejectWithValue("로그아웃 중 오류가 발생했습니다.");
+    }
+  },
+);
+
 const initialState: UserState = {
   user: null,
   isLoading: false,
@@ -168,6 +185,13 @@ const userSlice = createSlice({
       })
       .addCase(loginWithToken.rejected, (state) => {
         state.isInitialized = true;
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.user = null;
+      })
+      .addCase(logOut.rejected, (state) => {
+        state.user = null;
+        sessionStorage.removeItem("token");
       });
   },
 });
