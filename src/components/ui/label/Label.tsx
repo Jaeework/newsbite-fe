@@ -1,5 +1,5 @@
 import { type LabelProps } from "./Label.types";
-import { labelSizes } from "./label.tokens";
+import { labelSizes } from "./Label.tokens";
 import { cn } from "../../../lib/utils";
 
 const Label = ({ htmlFor, size, className, ...props }: LabelProps) => {
