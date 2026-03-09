@@ -12,7 +12,7 @@ import logo from "../../assets/logo.png";
 import Button from "../ui/button/Button";
 
 const Navbar = () => {
-  const isLogin: boolean = true;
+  const isLogin: boolean = false;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
