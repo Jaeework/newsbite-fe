@@ -1,13 +1,25 @@
-import { EyeOff, Lock, Mail } from "lucide-react";
-import InputWithIcon from "../../components/ui/input-with-icon/InputWithIcon";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import InputWithMessage from "../../components/ui/input-with-message/InputWithMessage";
 import Button from "../../components/ui/button/Button";
 import { Link } from "react-router-dom";
 import Label from "../../components/ui/label/Label";
 import useLoginForm from "../../hooks/useLogin";
-import type { loginField } from "./LoginPage.types";
+import type { loginField, LoginFormData } from "./LoginPage.types";
+import { GoogleLogin } from "@react-oauth/google";
+import { useState } from "react";
 
 const LoginPage = () => {
-  const { loginError, handleChange, handleSubmit } = useLoginForm();
+  const {
+    loginError,
+    fieldErrors,
+    handleChange,
+    handleSubmit,
+    handleGoogleLogin,
+  } = useLoginForm();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
+
   const fields: loginField[] = [
     {
       label: "Email Address",
@@ -20,35 +32,56 @@ const LoginPage = () => {
     },
     {
       label: "Password",
-      type: "password",
+      type: showPassword ? "text" : "password",
       id: "password",
       name: "password",
       placeholder: "Enter your password",
       leftIcon: <Lock size={16} />,
-      rightIcon: <EyeOff size={16} />,
+      rightIcon: (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="text-primary/55 translate-x-2"
+          onClick={handleShowPassword}
+        >
+          {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+        </Button>
+      ),
       autoComplete: "current-password",
     },
   ];
 
   return (
-    <div className="w-full">
-      <div className="shadow-primary/5 md:border-primary/5 w-full max-w-md bg-white p-8 shadow-xl md:rounded-xl md:p-12">
+    <div className="flex min-h-full w-screen items-center justify-center md:py-8">
+      <div className="shadow-primary/5 md:border-primary/5 w-full max-w-md bg-white p-8 shadow-xl md:min-w-md md:rounded-xl md:p-12">
         <div className="mb-8 text-center">
-          <h2 className="text-ink-900 mb-2 text-3xl font-extrabold">
+          <h1 className="text-ink-900 mb-2 text-3xl font-extrabold tracking-[-0.033em]">
             Welcome Back
-          </h2>
+          </h1>
           <p className="text-ink/50">Log in to access your dashboard</p>
         </div>
-        {loginError && <p className="text-sm text-red-500">{loginError}</p>}
+        {loginError && (
+          <p className="text-center text-sm text-red-500">{loginError}</p>
+        )}
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <div key={field.id}>
-              <Label size="sm" htmlFor={field.name}>
-                {field.label}
-              </Label>
-              <InputWithIcon {...field} onChange={handleChange} required />
-            </div>
-          ))}
+          {fields.map((field) => {
+            const fieldName = field.name as keyof LoginFormData;
+            const error = fieldErrors[fieldName];
+            return (
+              <div key={field.id}>
+                <Label size="sm" htmlFor={field.name}>
+                  {field.label}
+                </Label>
+                <InputWithMessage
+                  {...field}
+                  color="paper"
+                  onChange={handleChange}
+                  message={error}
+                />
+              </div>
+            );
+          })}
 
           <Button
             size="xl"
@@ -79,22 +112,8 @@ const LoginPage = () => {
             <span className="text-ink/50 bg-white px-2">Or continue with</span>
           </div>
         </div>
-        <div className="grid grid-cols-1">
-          <Button
-            variant="outline"
-            size="lg"
-            radius="lg"
-            isFullWidth
-            className="hover:bg-border/30 transition-colors"
-          >
-            <img
-              alt=""
-              className="size-4"
-              data-alt="Google logo icon"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_WwNV9mGbFuKd0F8evGqE5kf8vsutitprmCB3Y6vVQWenCUsJ-B3qQeaaA_sZUoR3H_UvPSmuJ8CIfdgMymDex_l5LdOxAzXGU08d3uFo_TJmh8FVCuvcIzLFfceNswe0fe_WM1mFbvxpuzvhtgEcWDIW0jz1nNfhr02_DrW-wDnT_IOleYJFmxcesd7AcswoHRx0y6Hl1cfKANUIOFR5LM_6OfPK7_ktSDSu463Vc88ELcIU3foaUmpOa4CT07vgp4TVSO5USIs"
-            />
-            <span className="text-sm font-semibold">Google</span>
-          </Button>
+        <div className="mb-2 flex justify-center">
+          <GoogleLogin logo_alignment="center" onSuccess={handleGoogleLogin} />
         </div>
       </div>
     </div>
