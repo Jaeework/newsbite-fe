@@ -1,16 +1,21 @@
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import InputWithIcon from "../../components/ui/input-with-icon/InputWithIcon";
+import InputWithMessage from "../../components/ui/input-with-message/InputWithMessage";
 import Button from "../../components/ui/button/Button";
 import { Link } from "react-router-dom";
 import Label from "../../components/ui/label/Label";
 import useLoginForm from "../../hooks/useLogin";
-import type { loginField } from "./LoginPage.types";
+import type { loginField, LoginFormData } from "./LoginPage.types";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 const LoginPage = () => {
-  const { loginError, handleChange, handleSubmit, handleGoogleLogin } =
-    useLoginForm();
+  const {
+    loginError,
+    fieldErrors,
+    handleChange,
+    handleSubmit,
+    handleGoogleLogin,
+  } = useLoginForm();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => setShowPassword((prev) => !prev);
@@ -56,21 +61,27 @@ const LoginPage = () => {
           </h1>
           <p className="text-ink/50">Log in to access your dashboard</p>
         </div>
-        {loginError && <p className="text-sm text-red-500">{loginError}</p>}
+        {loginError && (
+          <p className="text-center text-sm text-red-500">{loginError}</p>
+        )}
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <div key={field.id}>
-              <Label size="sm" htmlFor={field.name}>
-                {field.label}
-              </Label>
-              <InputWithIcon
-                {...field}
-                color="paper"
-                onChange={handleChange}
-                required
-              />
-            </div>
-          ))}
+          {fields.map((field) => {
+            const fieldName = field.name as keyof LoginFormData;
+            const error = fieldErrors[fieldName];
+            return (
+              <div key={field.id}>
+                <Label size="sm" htmlFor={field.name}>
+                  {field.label}
+                </Label>
+                <InputWithMessage
+                  {...field}
+                  color="paper"
+                  onChange={handleChange}
+                  message={error}
+                />
+              </div>
+            );
+          })}
 
           <Button
             size="xl"
