@@ -31,4 +31,9 @@ export const inputColors = {
     input:
       "bg-red-50 [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_theme(colors.red.50)]",
   },
+  success: {
+    wrapper: "bg-green-50 border-green-300",
+    input:
+      "bg-green-50 [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_theme(colors.green.50)]",
+  },
 };
