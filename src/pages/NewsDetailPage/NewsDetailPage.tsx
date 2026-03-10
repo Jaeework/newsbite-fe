@@ -180,8 +180,7 @@ const NewsDetailPage = () => {
               className="mx-4 mt-4 mb-2 w-[calc(100%-2rem)] pt-3 pb-3 font-medium"
               disabled={selectedIds.length === 0}
               onClick={() => {
-                console.log("저장될 단어 ID 배열:", selectedIds);
-                // 여기에 API 요청 로직 추가
+                // 유저 단어저장 API 호출
               }}
             >
               {selectedIds.length > 0
