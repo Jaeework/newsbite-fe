@@ -7,3 +7,28 @@ export const inputSizes = {
   lg: "h-[1.875rem] px-3",
   xl: "h-[2.25rem] px-4",
 } as const;
+
+export type InputColor = keyof typeof inputColors;
+
+export const inputColors = {
+  default: {
+    wrapper: "bg-background border-transparent",
+    input:
+      "bg-background [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_var(--color-background)]",
+  },
+  paper: {
+    wrapper: "bg-paper/50 border-transparent",
+    input:
+      "bg-paper/50 [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_#f7f7f5]",
+  },
+  primary: {
+    wrapper: "bg-primary/50 border-transparent",
+    input:
+      "bg-primary/50 [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_#97aec1]",
+  },
+  error: {
+    wrapper: "bg-red-50 border-red-300",
+    input:
+      "bg-red-50 [&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_theme(colors.red.50)]",
+  },
+};

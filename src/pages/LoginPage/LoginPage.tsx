@@ -61,7 +61,12 @@ const LoginPage = () => {
               <Label size="sm" htmlFor={field.name}>
                 {field.label}
               </Label>
-              <InputWithIcon {...field} onChange={handleChange} required />
+              <InputWithIcon
+                {...field}
+                color="paper"
+                onChange={handleChange}
+                required
+              />
             </div>
           ))}
 
