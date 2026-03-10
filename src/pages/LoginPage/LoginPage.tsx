@@ -1,14 +1,18 @@
-import { EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import InputWithIcon from "../../components/ui/input-with-icon/InputWithIcon";
 import Button from "../../components/ui/button/Button";
 import { Link } from "react-router-dom";
 import Label from "../../components/ui/label/Label";
 import useLoginForm from "../../hooks/useLogin";
 import type { loginField } from "./LoginPage.types";
+import { useState } from "react";
 
 const LoginPage = () => {
   const { loginError, handleChange, handleSubmit, handleGoogleLogin } =
     useLoginForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
+
   const fields: loginField[] = [
     {
       label: "Email Address",
@@ -21,12 +25,22 @@ const LoginPage = () => {
     },
     {
       label: "Password",
-      type: "password",
+      type: showPassword ? "text" : "password",
       id: "password",
       name: "password",
       placeholder: "Enter your password",
       leftIcon: <Lock size={16} />,
-      rightIcon: <EyeOff size={16} />,
+      rightIcon: (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="text-primary/55 translate-x-2"
+          onClick={handleShowPassword}
+        >
+          {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+        </Button>
+      ),
       autoComplete: "current-password",
     },
   ];
