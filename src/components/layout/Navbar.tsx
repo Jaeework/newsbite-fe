@@ -15,7 +15,6 @@ import { logOut } from "../../features/user/userSlice";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  // const isLogin: boolean = true;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.user);
 
@@ -27,7 +26,6 @@ const Navbar = () => {
     }`;
   const handleLogout = () => {
     dispatch(logOut());
-    // navigate("/");
   };
 
   return (
@@ -76,7 +74,7 @@ const Navbar = () => {
                   <div className="bg-background border-border absolute -right-2 z-60 mt-2 w-40 overflow-hidden rounded-lg border py-1 shadow-md md:-right-4 md:w-48">
                     <Link
                       to="/mypage"
-                      className="text-ink hover:bg-paper hover:text-ink flex items-center gap-2.5 px-3 py-2.5 text-xs font-medium transition-colors"
+                      className="text-ink hover:bg-primary/10 hover:text-ink flex items-center gap-2.5 px-3 py-2.5 text-xs font-medium transition-colors"
                     >
                       <CircleUser className="h-4 w-4" />
                       Profile
@@ -85,6 +83,7 @@ const Navbar = () => {
                     <Button
                       variant="ghost"
                       isFullWidth
+                      radius="none"
                       className="justify-start px-3 py-2.5 text-xs font-medium"
                       onClick={handleLogout}
                     >
@@ -96,7 +95,9 @@ const Navbar = () => {
               </div>
             ) : (
               <Link to="/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="ghost" className="font-semibold">
+                  Login
+                </Button>
               </Link>
             )}
           </div>
