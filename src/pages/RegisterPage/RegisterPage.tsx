@@ -46,10 +46,8 @@ const RegisterPage = () => {
                 <InputWithMessage
                   {...field}
                   color="primary"
-                  message={fieldStates[fieldName]?.message}
-                  variant={fieldStates[fieldName]?.variant}
+                  messages={fieldStates[fieldName]}
                   onChange={handleChange}
-                  required
                   className="border-primary/10"
                 />
               </div>
@@ -104,7 +102,11 @@ const RegisterPage = () => {
               .
             </Label>
           </div>
-          {policyError && <p className="text-sm text-red-500">{policyError}</p>}
+          {policyError && (
+            <p className="translate-x-1 -translate-y-4 text-sm text-red-500">
+              {policyError}
+            </p>
+          )}
           <Button
             size="xl"
             radius="xl"

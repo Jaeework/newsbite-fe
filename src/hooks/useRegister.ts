@@ -3,14 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { clearErrors, registerUser } from "../features/user/userSlice";
 import type { RegisterFormData } from "../pages/RegisterPage/RegisterPage.types";
-import type { ValidationVariant } from "../components/ui/input-with-message/InputWithMessage.types";
+import type { ValidationMessage } from "../components/ui/input-with-message/InputWithMessage.types";
 import { FIELD_VALIDATIONS } from "../pages/RegisterPage/constants/fieldValidations";
 
-type FieldState = {
-  message: string;
-  variant: ValidationVariant;
+type FieldStates = Partial<Record<keyof RegisterFormData, ValidationMessage[]>>;
+
+const getInitialFieldStates = (): FieldStates => {
+  const states: FieldStates = {};
+
+  for (const [name, rules] of Object.entries(FIELD_VALIDATIONS)) {
+    if (!rules) continue;
+
+    const messages = rules
+      .filter((rule) => !rule.hideOnSuccess)
+      .map((rule) => ({
+        message: rule.message,
+        variant: "default" as const,
+      }));
+
+    if (messages.length > 0) {
+      states[name as keyof RegisterFormData] = messages;
+    }
+  }
+
+  return states;
 };
-type FieldStates = Partial<Record<keyof RegisterFormData, FieldState>>;
 
 const useRegister = () => {
   const navigate = useNavigate();
@@ -24,38 +41,40 @@ const useRegister = () => {
     secPassword: "",
     level: "A2",
   });
-  const initialFieldStates: FieldStates = {
-    nickname: { message: "2자 이상, 10자 이내", variant: "default" },
-    password: {
-      message: "8자 이상 / 영문, 숫자, 특수문자 2개 이상 조합",
-      variant: "default",
-    },
-  };
 
-  const [fieldStates, setFieldStates] =
-    useState<FieldStates>(initialFieldStates);
+  const [fieldStates, setFieldStates] = useState<FieldStates>(
+    getInitialFieldStates(),
+  );
   const [policy, setPolicy] = useState(false);
   const [policyError, setPolicyError] = useState("");
 
   const validateField = (name: keyof RegisterFormData, value: string) => {
-    const validation = FIELD_VALIDATIONS[name];
-    if (!validation) return;
+    const rules = FIELD_VALIDATIONS[name];
+    if (!rules) return;
 
-    const isValid = validation.validate(value, formData);
+    const messages: ValidationMessage[] = [];
 
-    if (isValid && validation.hideOnSuccess) {
+    for (const rule of rules) {
+      const isValid = rule.validate(value, formData);
+
+      if (isValid && rule.hideOnSuccess) continue;
+
+      messages.push({
+        message: rule.message,
+        variant: isValid ? "success" : "error",
+      });
+    }
+
+    if (messages.length > 0) {
+      setFieldStates((prev) => ({
+        ...prev,
+        [name]: messages,
+      }));
+    } else {
       setFieldStates((prev) => {
         const { [name]: _, ...rest } = prev;
         return rest;
       });
-    } else {
-      setFieldStates((prev) => ({
-        ...prev,
-        [name]: {
-          message: validation.message,
-          variant: isValid ? "success" : "error",
-        },
-      }));
     }
   };
 
@@ -71,7 +90,7 @@ const useRegister = () => {
   };
 
   const validateForm = (): boolean => {
-    const newFieldStates: FieldStates = { ...initialFieldStates };
+    const newFieldStates: FieldStates = {};
     let isValid = true;
 
     const fieldsToValidate: (keyof RegisterFormData)[] = [
@@ -82,22 +101,35 @@ const useRegister = () => {
     ];
 
     for (const name of fieldsToValidate) {
-      const validation = FIELD_VALIDATIONS[name];
-      if (!validation) continue;
+      const value = formData[name];
 
-      const fieldValid = validation.validate(formData[name], formData);
-
-      if (!fieldValid) {
-        newFieldStates[name] = {
-          message: validation.message,
-          variant: "error",
-        };
+      if (!value.trim()) {
+        newFieldStates[name] = [
+          { message: "필수 입력 항목입니다", variant: "error" },
+        ];
         isValid = false;
-      } else if (!validation.hideOnSuccess) {
-        newFieldStates[name] = {
-          message: validation.message,
-          variant: "success",
-        };
+        continue;
+      }
+
+      const rules = FIELD_VALIDATIONS[name];
+      if (!rules) continue;
+
+      const messages: ValidationMessage[] = [];
+
+      for (const rule of rules) {
+        const ruleValid = rule.validate(value, formData);
+        if (!ruleValid) isValid = false;
+
+        if (ruleValid && rule.hideOnSuccess) continue;
+
+        messages.push({
+          message: rule.message,
+          variant: ruleValid ? "success" : "error",
+        });
+      }
+
+      if (messages.length > 0) {
+        newFieldStates[name] = messages;
       }
     }
 
