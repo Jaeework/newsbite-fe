@@ -30,7 +30,7 @@ const RegisterPage = () => {
             Join thousands of learners today
           </p>
         </div>
-        <form className="space-y-7" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {registrationError && (
             <p className="text-center text-sm text-red-500">
               {registrationError}
