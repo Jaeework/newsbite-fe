@@ -42,6 +42,51 @@ export const getMyWords = createAsyncThunk<
   }
 });
 
+export const updateWordStatus = createAsyncThunk<
+  UserWord,
+  { userWordId: string; status: "done" | "doing" },
+  { rejectValue: string }
+>(
+  "word/updateWordStatus",
+  async ({ userWordId, status }, { rejectWithValue }) => {
+    try {
+      const res = await api.put<ApiResponse<UserWord>>(
+        `/user/words/${userWordId}`,
+        {
+          status,
+        },
+      );
+
+      const data = res.data.data;
+      if (!data)
+        return rejectWithValue("업데이트할 데이터를 찾을 수 없습니다.");
+
+      return data;
+    } catch (error: any) {
+      if (isApiError(error) && error.isUserError) {
+        return rejectWithValue(error.message || "상태 업데이트 실패");
+      }
+      return rejectWithValue("서버 통신 오류가 발생했습니다.");
+    }
+  },
+);
+
+export const deleteWord = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("word/deleteWord", async (userWordId, { rejectWithValue }) => {
+  try {
+    await api.delete<ApiResponse<UserWord>>(`/user/words/${userWordId}`);
+    return userWordId;
+  } catch (error: any) {
+    if (isApiError(error) && error.isUserError) {
+      return rejectWithValue(error.message || "삭제 실패");
+    }
+    return rejectWithValue("삭제 실패");
+  }
+});
+
 const wordSlice = createSlice({
   name: "word",
   initialState,
@@ -57,12 +102,40 @@ const wordSlice = createSlice({
       })
       .addCase(getMyWords.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userWords = action.payload; // Postman에서 본 그 배열이 여기 꽂힘!
+        state.userWords = action.payload;
         state.error = null;
       })
       .addCase(getMyWords.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "단어장을 불러오지 못했습니다.";
+      })
+      .addCase(updateWordStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateWordStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userWords = state.userWords.map((uw) =>
+          uw._id === action.payload._id ? action.payload : uw,
+        );
+        state.error = null;
+      })
+      .addCase(updateWordStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "상태 업데이트에 실패했습니다.";
+      })
+      .addCase(deleteWord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteWord.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userWords = state.userWords.filter(
+          (uw) => uw._id !== action.payload,
+        );
+        state.error = null;
+      })
+      .addCase(deleteWord.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "단어 삭제에 실패했습니다.";
       });
   },
 });
