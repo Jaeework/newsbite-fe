@@ -1,7 +1,7 @@
 import Button from "../../components/ui/button/Button";
 import { Link } from "react-router-dom";
 import Label from "../../components/ui/label/Label";
-import { REGISTER_FIELDS } from "./registerFields";
+import { REGISTER_FIELDS } from "./constants/registerFields";
 import useRegister from "../../hooks/useRegister";
 import Input from "../../components/ui/input/Input";
 import InputWithMessage from "../../components/ui/input-with-message/InputWithMessage";

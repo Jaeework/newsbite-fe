@@ -1,5 +1,5 @@
 import { Lock, Mail, UserRound } from "lucide-react";
-import type { registerField } from "./RegisterPage.types";
+import type { registerField } from "../RegisterPage.types";
 
 export const REGISTER_FIELDS: registerField[] = [
   {
