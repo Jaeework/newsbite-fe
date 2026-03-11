@@ -51,6 +51,14 @@ export interface NewsState {
   currentWords: Word[];
   currentAbbreviations: Abbreviation[];
   articles: News[];
+  pagination: NewsPagination | null;
   isLoading: boolean;
   error: string | null;
+}
+
+export interface NewsPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }

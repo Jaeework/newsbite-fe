@@ -1,44 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ArticleCard from "../../components/article/ArticleCard";
 import FilterBar from "../../components/article/FilterBar";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { fetchArticles } from "../../features/news/newsSlice";
-import type { News } from "../../features/news/news.types";
 
 const ITEMS_PER_PAGE = 12;
 
 const ArticleListPage = () => {
   const dispatch = useAppDispatch();
-  const {
-    articles: articleList,
-    isLoading,
-    error,
-  } = useAppSelector((state) => state.news);
+  const { articles, pagination, isLoading, error } = useAppSelector(
+    (state) => state.news,
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchArticles());
-  }, [dispatch]);
-
-  const mappedArticles = useMemo(
-    () =>
-      articleList.map((item: News) => ({
-        id: item._id,
-        title: item.title,
-        level: item.level ?? "A1",
-        date: item.createdAt
-          ? new Date(item.createdAt).toLocaleDateString()
-          : "",
-        image: item.image || "",
-      })),
-    [articleList],
-  );
-
-  const totalPages = Math.ceil(mappedArticles.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentArticles = mappedArticles.slice(startIndex, endIndex);
+    dispatch(fetchArticles({ page: currentPage, limit: ITEMS_PER_PAGE }));
+  }, [dispatch, currentPage]);
 
   return (
     <div className="min-h-screen bg-[#f3f3f3] px-6 py-8">
@@ -55,22 +33,26 @@ const ArticleListPage = () => {
         {!isLoading && !error && (
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {currentArticles.map((article) => (
+              {articles.map((article) => (
                 <ArticleCard
-                  key={article.id}
-                  id={article.id}
+                  key={article._id}
+                  id={article._id}
                   title={article.title}
                   level={article.level}
-                  date={article.date}
-                  image={article.image}
+                  date={
+                    article.createdAt
+                      ? new Date(article.createdAt).toLocaleDateString()
+                      : ""
+                  }
+                  image={article.image || ""}
                 />
               ))}
             </div>
 
-            {totalPages > 1 && (
+            {pagination && pagination.totalPages > 1 && (
               <div className="mt-8 flex justify-center gap-2">
                 {Array.from(
-                  { length: totalPages },
+                  { length: pagination.totalPages },
                   (_, index) => index + 1,
                 ).map((pageNumber) => (
                   <button

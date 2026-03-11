@@ -1,32 +1,51 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../lib/axios";
 import { isApiError, type ApiResponse } from "../../types/api.types";
-import type { NewsDetailData, NewsState, News } from "./news.types";
+import type {
+  NewsDetailData,
+  NewsState,
+  News,
+  NewsPagination,
+} from "./news.types";
 
 //전체 뉴스 가져오기
 
 export const fetchArticles = createAsyncThunk<
-  News[],
-  void,
+  { articles: News[]; pagination: NewsPagination },
+  { page: number; limit: number; keyword?: string },
   { rejectValue: string }
->("news/fetchArticles", async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.get<ApiResponse<News[]>>("/news");
-    const result = response.data?.data;
+>(
+  "news/fetchArticles",
+  async ({ page, limit, keyword }, { rejectWithValue }) => {
+    try {
+      const response = await api.get<
+        ApiResponse<News[]> & { pagination?: NewsPagination }
+      >("/news", {
+        params: {
+          page,
+          limit,
+          ...(keyword ? { keyword } : {}),
+        },
+      });
 
-    if (!result) {
-      return rejectWithValue("뉴스 정보를 찾을 수 없습니다.");
+      const articles = response.data?.data;
+      const pagination = response.data?.pagination;
+
+      if (!articles || !pagination) {
+        return rejectWithValue("뉴스 정보를 찾을 수 없습니다.");
+      }
+
+      return { articles, pagination };
+    } catch (error) {
+      if (isApiError(error) && error.isUserError) {
+        return rejectWithValue(
+          error.message || "뉴스 정보를 가져오는 중 오류가 발생했습니다.",
+        );
+      }
+      return rejectWithValue("뉴스 정보를 가져오는 중 오류가 발생했습니다.");
     }
-    return result;
-  } catch (error) {
-    if (isApiError(error) && error.isUserError) {
-      return rejectWithValue(
-        error.message || "뉴스 정보를 가져오는 중 오류가 발생했습니다.",
-      );
-    }
-    return rejectWithValue("뉴스 정보를 가져오는 중 오류가 발생했습니다.");
-  }
-});
+  },
+);
 
 // 뉴스 상세 정보 가져오기
 export const fetchNewsDetail = createAsyncThunk<
@@ -77,6 +96,7 @@ const initialState: NewsState = {
   currentWords: [],
   currentAbbreviations: [],
   articles: [],
+  pagination: null,
   isLoading: false,
   error: null,
 };
@@ -90,6 +110,7 @@ const newsSlice = createSlice({
       state.currentWords = [];
       state.currentAbbreviations = [];
       state.articles = [];
+      state.pagination = null;
       state.isLoading = false;
       state.error = null;
     },
@@ -128,7 +149,8 @@ const newsSlice = createSlice({
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.articles = action.payload;
+        state.articles = action.payload.articles;
+        state.pagination = action.payload.pagination;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.isLoading = false;
