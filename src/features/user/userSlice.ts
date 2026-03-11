@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type {
-  LoginWithEmailData,
+  LoginResponseData,
   User,
   UserLevel,
   UserState,
@@ -66,13 +66,10 @@ export const loginWithEmail = createAsyncThunk<
     if (!email || !password) {
       return rejectWithValue("이메일과 패스워드를 입력해주세요.");
     }
-    const res = await api.post<ApiResponse<LoginWithEmailData>>(
-      "/auth/signin",
-      {
-        email,
-        password,
-      },
-    );
+    const res = await api.post<ApiResponse<LoginResponseData>>("/auth/signin", {
+      email,
+      password,
+    });
     const data = res.data.data;
 
     if (!data) {
@@ -111,6 +108,49 @@ export const loginWithToken = createAsyncThunk<
     return rejectWithValue("로그인 중 오류가 발생했습니다.");
   }
 });
+
+export const loginWithGoogle = createAsyncThunk<
+  User,
+  string,
+  { rejectValue: string }
+>("user/loginWithGoogle", async (credential, { rejectWithValue }) => {
+  try {
+    const res = await api.post<ApiResponse<LoginResponseData>>("/auth/google", {
+      credential: credential,
+    });
+
+    const data = res.data.data;
+
+    if (!data) {
+      return rejectWithValue("로그인 중 오류가 발생했습니다.");
+    }
+
+    sessionStorage.setItem("token", data.token);
+    return data.user;
+  } catch (error) {
+    if (isApiError(error) && error.isUserError) {
+      return rejectWithValue(error.message || "로그인 중 오류가 발생했습니다.");
+    }
+    return rejectWithValue("로그인 중 오류가 발생했습니다.");
+  }
+});
+
+export const logOut = createAsyncThunk<void, void, { rejectValue: string }>(
+  "user/logOut",
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post("/auth/signout");
+      sessionStorage.removeItem("token");
+    } catch (error) {
+      if (isApiError(error) && error.isUserError) {
+        return rejectWithValue(
+          error.message || "로그아웃 중 오류가 발생했습니다.",
+        );
+      }
+      return rejectWithValue("로그아웃 중 오류가 발생했습니다.");
+    }
+  },
+);
 
 const initialState: UserState = {
   user: null,
@@ -168,6 +208,25 @@ const userSlice = createSlice({
       })
       .addCase(loginWithToken.rejected, (state) => {
         state.isInitialized = true;
+      })
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.loginError = null;
+        state.user = action.payload;
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.isLoading = false;
+        state.loginError = action.payload || "로그인 중 오류가 발생했습니다.";
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.user = null;
+      })
+      .addCase(logOut.rejected, (state) => {
+        state.user = null;
+        sessionStorage.removeItem("token");
       });
   },
 });

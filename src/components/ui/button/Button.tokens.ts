@@ -29,7 +29,7 @@ export const buttonVariants = {
   outline:
     "border border-border bg-background text-ink hover:bg-paper hover:text-ink",
   ink: "bg-ink text-background hover:bg-ink/80",
-  ghost: "bg-transparent text-ink hover:bg-paper hover:text-ink",
+  ghost: "bg-transparent text-ink hover:bg-primary/10 hover:text-ink",
   link: "text-primary underline-offset-4 hover:underline",
   background: "bg-background text-primary hover:bg-border",
   accent: "bg-accent text-ink hover:bg-accent/80",
