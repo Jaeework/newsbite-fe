@@ -1,3 +1,4 @@
+import type { Word } from "../word/word.types";
 export interface News {
   _id: string;
   title: string;
@@ -8,20 +9,6 @@ export interface News {
   published_at: string;
   level: "A2" | "B1" | "B2" | "C1";
   source: string;
-  __v: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Word {
-  _id: string;
-  id: string;
-  text: string;
-  meaning: string;
-  example: string;
-  example_meaning: string;
-  type: "word" | "idiom";
-  isDone: boolean;
   __v: number;
   createdAt: string;
   updatedAt: string;
