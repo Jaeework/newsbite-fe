@@ -7,8 +7,11 @@ import useLoginForm from "../../hooks/useLogin";
 import type { loginField, LoginFormData } from "./LoginPage.types";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
+import { useAppSelector } from "../../features/hooks";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const LoginPage = () => {
+  const { isLoading } = useAppSelector((state) => state.user);
   const {
     loginError,
     fieldStates,
@@ -87,10 +90,11 @@ const LoginPage = () => {
             size="xl"
             radius="lg"
             isFullWidth
+            variant={isLoading ? "disable" : "primary"}
             className="shadow-primary/20 mt-4 transform font-bold shadow-lg transition-all active:scale-[0.98]"
             type="submit"
           >
-            <h1>Log in</h1>
+            {isLoading ? <LoadingSpinner size="sm" /> : <h1>Log in</h1>}
           </Button>
         </form>
         <div className="mt-1 pt-6 text-center">
