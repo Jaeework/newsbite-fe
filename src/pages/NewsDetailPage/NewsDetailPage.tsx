@@ -7,6 +7,7 @@ import WordCard from "../../components/ui/WordCard/WordCard";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { fetchNewsDetail, saveUserWords } from "../../features/news/newsSlice";
 import { useEffect, useState, useMemo, useRef } from "react";
+import { showToast } from "../../features/toast/toastSlice";
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -195,12 +196,22 @@ const NewsDetailPage = () => {
                   dispatch(saveUserWords({ wordIds: selectedIds }))
                     .unwrap()
                     .then(() => {
-                      alert("단어가 저장되었습니다!");
+                      dispatch(
+                        showToast({
+                          message: "단어가 저장되었습니다!",
+                          type: "success",
+                        }),
+                      );
                       setSelectedIds([]);
                     })
                     .catch((err) => {
-                      alert(
-                        err || "단어 저장에 실패했습니다. 다시 시도해주세요.",
+                      dispatch(
+                        showToast({
+                          message:
+                            err ||
+                            "단어 저장에 실패했습니다. 다시 시도해주세요.",
+                          type: "error",
+                        }),
                       );
                     });
                 }}
