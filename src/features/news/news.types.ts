@@ -1,3 +1,4 @@
+import type { Pagination } from "../../types/api.types";
 import type { Word } from "../word/word.types";
 export interface News {
   _id: string;
@@ -38,14 +39,7 @@ export interface NewsState {
   currentWords: Word[];
   currentAbbreviations: Abbreviation[];
   articles: News[];
-  pagination: NewsPagination | null;
+  pagination: Pagination | null;
   isLoading: boolean;
   error: string | null;
-}
-
-export interface NewsPagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
 }

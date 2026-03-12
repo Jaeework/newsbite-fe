@@ -3,26 +3,21 @@ import api from "../../lib/axios";
 import {
   isApiError,
   type ApiResponse,
-  type PaginatedApiResponse,
+  type Pagination,
 } from "../../types/api.types";
-import type {
-  NewsDetailData,
-  NewsState,
-  News,
-  NewsPagination,
-} from "./news.types";
+import type { NewsDetailData, NewsState, News } from "./news.types";
 import { showToast } from "../toast/toastSlice"; // 토스트 액션 임포트
 
 // 전체 뉴스 가져오기
 export const fetchArticles = createAsyncThunk<
-  { articles: News[]; pagination: NewsPagination },
+  { articles: News[]; pagination: Pagination },
   { page: number; limit: number; keyword?: string; level?: string },
   { rejectValue: string }
 >(
   "news/fetchArticles",
   async ({ page, limit, keyword, level }, { rejectWithValue }) => {
     try {
-      const response = await api.get<PaginatedApiResponse<News[]>>("/news", {
+      const response = await api.get<ApiResponse<News[]>>("/news", {
         params: {
           page,
           limit,
@@ -166,7 +161,7 @@ const newsSlice = createSlice({
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.isLoading = false;
         state.articles = action.payload.articles;
-        state.pagination = action.payload.pagination;
+        state.pagination = action.payload.pagination || undefined;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.isLoading = false;
