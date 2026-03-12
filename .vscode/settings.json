@@ -9,7 +9,4 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "css.lint.unknownAtRules": "ignore",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
 }
