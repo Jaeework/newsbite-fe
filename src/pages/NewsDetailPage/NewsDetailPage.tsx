@@ -176,9 +176,9 @@ const NewsDetailPage = () => {
                     <div key={index} className="w-full">
                       <WordCard
                         word={word}
-                        isSelected={selectedIds.includes(word.id)}
+                        isSelected={selectedIds.includes(word._id)}
                         onSelect={() => {
-                          handleSelect(word.id);
+                          handleSelect(word._id);
                         }}
                       />
                     </div>
