@@ -18,7 +18,12 @@ export const checkDuplicateEmail = createAsyncThunk<
       params: { email },
     });
 
-    return res.data.data ?? false;
+    const isDuplicate = res.data.data;
+    if (isDuplicate === undefined || isDuplicate === null) {
+      return rejectWithValue("이메일을 확인하지 못했습니다.");
+    }
+
+    return isDuplicate;
   } catch (error) {
     if (isApiError(error) && error.isUserError) {
       return rejectWithValue(error.message || "이메일을 확인하지 못했습니다.");
