@@ -8,30 +8,6 @@ export interface Pagination {
 export interface ApiResponse<T> {
   success: boolean;
   data?: T | null;
-  pagination: Pagination;
-}
-
-export interface ApiError {
-  success: boolean;
-  isUserError: boolean;
-  message: string | null;
-}
-
-export interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T | null;
-}
-
-export interface PaginatedApiResponse<T> {
-  success: boolean;
-  data?: T | null;
   pagination?: Pagination;
 }
 
