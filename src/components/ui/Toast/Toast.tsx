@@ -1,12 +1,22 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../features/hooks";
-import { hideToast } from "../../../features/toast/toastSlice";
+import { hideToast, showToast } from "../../../features/toast/toastSlice";
 import { cn } from "../../../lib/utils";
 
 const Toast = () => {
   const dispatch = useAppDispatch();
 
   const { message, type, isVisible } = useAppSelector((state) => state.toast);
+
+  const newsError = useAppSelector((state) => state.news.error);
+  const wordError = useAppSelector((state) => state.word.error);
+
+  useEffect(() => {
+    const errorMsg = newsError || wordError;
+    if (errorMsg) {
+      dispatch(showToast({ message: errorMsg, type: "error" }));
+    }
+  }, [newsError, wordError, dispatch]);
 
   useEffect(() => {
     if (isVisible) {
