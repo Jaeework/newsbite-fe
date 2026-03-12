@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../lib/axios";
-import { isApiError, type ApiResponse } from "../../types/api.types";
+import {
+  isApiError,
+  type ApiResponse,
+  type PaginatedApiResponse,
+} from "../../types/api.types";
 import type {
   NewsDetailData,
   NewsState,
@@ -18,9 +22,7 @@ export const fetchArticles = createAsyncThunk<
   "news/fetchArticles",
   async ({ page, limit, keyword, level }, { rejectWithValue }) => {
     try {
-      const response = await api.get<
-        ApiResponse<News[]> & { pagination?: NewsPagination }
-      >("/news", {
+      const response = await api.get<PaginatedApiResponse<News[]>>("/news", {
         params: {
           page,
           limit,

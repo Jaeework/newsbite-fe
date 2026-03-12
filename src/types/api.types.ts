@@ -17,6 +17,23 @@ export interface ApiError {
   message: string | null;
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface PaginatedApiResponse<T> extends ApiResponse<T> {
+  pagination?: Pagination;
+}
+
+export interface ApiError {
+  success: boolean;
+  isUserError: boolean;
+  message: string | null;
+}
+
 export const isApiError = (error: unknown): error is ApiError => {
   return typeof error === "object" && error !== null && "isUserError" in error;
 };
