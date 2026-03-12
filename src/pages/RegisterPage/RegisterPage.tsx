@@ -54,6 +54,7 @@ const RegisterPage = () => {
                   <div className="flex-1">
                     <InputWithMessage
                       {...field}
+                      readOnly={isLoading || isCheckingEmail}
                       color="primary"
                       messages={fieldStates[fieldName]}
                       onChange={handleChange}

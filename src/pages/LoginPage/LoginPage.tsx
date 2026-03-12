@@ -77,6 +77,7 @@ const LoginPage = () => {
                 </Label>
                 <InputWithMessage
                   {...field}
+                  readOnly={isLoading}
                   color="primary"
                   onChange={handleChange}
                   messages={fieldStates[fieldName]}
