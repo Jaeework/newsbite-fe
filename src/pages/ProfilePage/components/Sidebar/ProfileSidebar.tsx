@@ -10,13 +10,13 @@ const ProfileSidebar = () => {
         </h3>
       </div>
       <Link
-        className="bg-accent-blue/10 text-accent-blue flex items-center gap-3 rounded-xl px-4 py-3 font-semibold"
+        className="bg-accent-blue/10 text-accent-blue flex hidden items-center gap-3 rounded-xl px-4 py-3 font-semibold md:block"
         to="/me/profile"
       >
         <User size={16} />
         <span>Profile Details</span>
       </Link>
-      <hr className="border-ink/10 my-1" />
+      <hr className="border-ink/10 my-1 hidden md:block" />
     </aside>
   );
 };
