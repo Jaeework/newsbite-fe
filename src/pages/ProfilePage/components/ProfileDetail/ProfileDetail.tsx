@@ -46,51 +46,65 @@ const ProfileDetail = () => {
             value={user?.email ?? ""}
           />
         </div>
-        {isEdit && (
-          <div className="flex flex-col gap-2 md:col-span-2">
-            <Label>Password</Label>
-            <Button
-              size="xl"
-              radius="xl"
-              variant="border"
-              className="text-md w-fit font-bold transition-colors"
-              type="button"
-              onClick={() => setPasswordEdit((prev) => !prev)}
-            >
-              <Lock size={16} />
-              <span>{passwordEdit ? "Cancel" : "Change Password"}</span>
-            </Button>
+        <div
+          className={cn(
+            "grid transition-[grid-template-rows] duration-300 ease-in-out md:col-span-2",
+            isEdit ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+          )}
+        >
+          <div className="overflow-hidden">
+            <div className="flex flex-col gap-2 pt-6">
+              <Label>Password</Label>
+              <Button
+                size="xl"
+                radius="xl"
+                variant="border"
+                className="text-md w-fit font-bold transition-colors"
+                type="button"
+                onClick={() => setPasswordEdit((prev) => !prev)}
+              >
+                <Lock size={16} />
+                <span>{passwordEdit ? "Cancel" : "Change Password"}</span>
+              </Button>
+            </div>
           </div>
-        )}
+        </div>
 
-        {passwordEdit && (
-          <>
-            <div className="flex flex-col gap-2">
-              <Label>New Password</Label>
-              <InputWithMessage
-                name="password"
-                color="primary"
-                placeholder="Enter New Password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                messages={fieldStates.password}
-              />
+        <div
+          className={cn(
+            "grid transition-[grid-template-rows] duration-300 ease-in-out md:col-span-2",
+            passwordEdit ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+          )}
+        >
+          <div className="overflow-hidden">
+            <div className="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <Label>New Password</Label>
+                <InputWithMessage
+                  name="password"
+                  color="primary"
+                  placeholder="Enter New Password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  messages={fieldStates.password}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Confirm Password</Label>
+                <InputWithMessage
+                  name="secPassword"
+                  color="primary"
+                  placeholder="Confirm New Password"
+                  type="password"
+                  value={formData.secPassword}
+                  onChange={handleChange}
+                  messages={fieldStates.secPassword}
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Confirm Password</Label>
-              <InputWithMessage
-                name="secPassword"
-                color="primary"
-                placeholder="Confirm New Password"
-                type="password"
-                value={formData.secPassword}
-                onChange={handleChange}
-                messages={fieldStates.secPassword}
-              />
-            </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
 
       <div className="border-primary/10 border-t pt-6">
