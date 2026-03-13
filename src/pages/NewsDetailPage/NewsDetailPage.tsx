@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Button from "../../components/ui/button/Button";
 import Badge from "../../components/ui/Badge/Badge";
 import NewsParagraph from "./components/NewsParagraph/NewsParagraph";
-import { BookOpen, Info } from "lucide-react";
+import { BookOpen, Info, ExternalLink } from "lucide-react";
 import WordCard from "../../components/ui/WordCard/WordCard";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
@@ -89,8 +89,10 @@ const NewsDetailPage = () => {
                 href={currentNews.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-primary inline-flex items-center underline"
               >
                 {currentNews.source}
+                <ExternalLink size={15} />
               </a>
             </section>
             <div className="absolute top-7 right-7 z-10 md:top-10 md:right-10">
