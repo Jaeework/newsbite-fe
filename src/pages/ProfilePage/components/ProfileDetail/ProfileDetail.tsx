@@ -5,6 +5,7 @@ import Input from "../../../../components/ui/input/Input";
 import InputWithMessage from "../../../../components/ui/input-with-message/InputWithMessage";
 import useUpdateUser from "../../../../hooks/useUpdateUser";
 import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import LevelSelector from "../../../../components/common/LevelSelector/LevelSelector";
 import { cn } from "../../../../lib/utils";
 
 const ProfileDetail = () => {
@@ -112,26 +113,11 @@ const ProfileDetail = () => {
         <div className="space-y-6">
           <div className="flex flex-col gap-2">
             <Label size="sm">English Proficiency Level</Label>
-            <div className="grid grid-cols-4 gap-3">
-              {(["A2", "B1", "B2", "C1"] as const).map((level) => (
-                <label className={cn(isEdit && "cursor-pointer")} key={level}>
-                  <Input
-                    disabled={!isEdit}
-                    className="peer absolute h-0 w-0 opacity-0"
-                    name="level"
-                    value={level}
-                    checked={formData.level === level}
-                    onChange={handleChange}
-                    type="radio"
-                  />
-                  <div className="peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary border-ink-300 bg-ink-50 flex flex-col items-center justify-center rounded-lg border p-3 transition-all">
-                    <span className="text-xs font-bold tracking-wider uppercase">
-                      {level}
-                    </span>
-                  </div>
-                </label>
-              ))}
-            </div>
+            <LevelSelector
+              selectedLevel={formData.level}
+              onChange={handleChange}
+              disabled={!isEdit}
+            />
           </div>
         </div>
       </div>
