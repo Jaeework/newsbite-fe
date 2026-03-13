@@ -10,6 +10,7 @@ import GuestOnlyRoute from "./GuestOnlyRoute";
 import MyWordPage from "../pages/MyWordPage/MyWordPage";
 import MyPage from "../pages/MyPage/MyPage";
 import MyArticlePage from "../pages/MyArticlePage/MyArticlePage";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
 
 const AppRouter = () => {
   return (
@@ -26,6 +27,7 @@ const AppRouter = () => {
             <Route path="vocabulary" element={<MyWordPage />} />
             <Route path="articles" element={<MyArticlePage />} />
           </Route>
+          <Route path="/me/profile" element={<ProfilePage />} />
         </Route>
       </Route>
       <Route element={<GuestOnlyRoute />}>
