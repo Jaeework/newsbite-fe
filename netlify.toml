@@ -1,0 +1,5 @@
+# SPA 라우팅 지원
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
