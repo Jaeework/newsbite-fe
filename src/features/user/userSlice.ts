@@ -7,6 +7,7 @@ import type {
 } from "./user.types";
 import api from "../../lib/axios";
 import { isApiError, type ApiResponse } from "../../types/api.types";
+import { showToast } from "../toast/toastSlice";
 
 export const checkDuplicateEmail = createAsyncThunk<
   boolean,
@@ -173,23 +174,34 @@ export const updateUser = createAsyncThunk<
   User,
   UserRequestData,
   { rejectValue: string }
->("user/updateUser", async (data, { rejectWithValue }) => {
+>("user/updateUser", async (data, { rejectWithValue, dispatch }) => {
   try {
     const res = await api.put<ApiResponse<User>>("/user/me", data);
 
     const user = res.data.data;
     if (!user) {
-      return rejectWithValue("프로필 수정 중 오류가 발생했습니다.");
+      const errorMsg = "프로필 수정 중 오류가 발생했습니다.";
+      dispatch(
+        showToast({ message: errorMsg, type: "error", position: "top" }),
+      );
+      return rejectWithValue(errorMsg);
     }
 
+    dispatch(
+      showToast({
+        message: "프로필이 수정되었습니다.",
+        type: "success",
+        position: "top",
+      }),
+    );
     return user;
   } catch (error) {
-    if (isApiError(error) && error.isUserError) {
-      return rejectWithValue(
-        error.message || "프로필 수정 중 오류가 발생했습니다.",
-      );
-    }
-    return rejectWithValue("프로필 수정 중 오류가 발생했습니다.");
+    const errorMsg =
+      isApiError(error) && error.isUserError
+        ? error.message || "프로필 수정 중 오류가 발생했습니다."
+        : "프로필 수정 중 오류가 발생했습니다.";
+    dispatch(showToast({ message: errorMsg, type: "error", position: "top" }));
+    return rejectWithValue(errorMsg);
   }
 });
 
