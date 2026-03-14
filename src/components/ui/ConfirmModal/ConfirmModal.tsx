@@ -17,7 +17,7 @@ const ConfirmModal = ({
       <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
         <h3 className="mb-2 text-lg font-semibold">{title}</h3>
 
-        <p className="text-sm text-gray-500">{message}</p>
+        <p className="text-sm whitespace-pre-line text-gray-500">{message}</p>
 
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="outline" type="button" onClick={onCancel}>
