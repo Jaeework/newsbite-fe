@@ -51,7 +51,9 @@ const ProfileDetail = () => {
         <div
           className={cn(
             "grid transition-[grid-template-rows] duration-300 ease-in-out md:col-span-2",
-            isEdit ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+            isEdit && user?.provider === "local"
+              ? "grid-rows-[1fr]"
+              : "grid-rows-[0fr]",
           )}
         >
           <div className="overflow-hidden">
@@ -114,14 +116,11 @@ const ProfileDetail = () => {
       <div className="border-primary/10 border-t pt-6">
         <h2 className="mb-4 text-xl font-bold">Learning Preferences</h2>
         <div className="space-y-6">
-          <div className="flex flex-col gap-2">
-            <Label size="sm">English Proficiency Level</Label>
-            <LevelSelector
-              selectedLevel={formData.level}
-              onChange={handleChange}
-              disabled={!isEdit}
-            />
-          </div>
+          <LevelSelector
+            selectedLevel={formData.level}
+            onChange={handleChange}
+            disabled={!isEdit}
+          />
         </div>
       </div>
 
