@@ -66,6 +66,14 @@ export const registerUser = createAsyncThunk<
         return rejectWithValue(errorMsg);
       }
 
+      dispatch(
+        showToast({
+          message: "가입이 완료되었습니다. 인증 메일을 확인해주세요.",
+          type: "success",
+          position: "top",
+        }),
+      );
+
       return data;
     } catch (error) {
       const errorMsg =
