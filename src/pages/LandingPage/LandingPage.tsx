@@ -16,7 +16,7 @@ const LandingPage = () => {
               <br />
               <span className="text-primary">Economic News</span>
               <br />
-              for
+              at
               <span className="text-primary"> Your Level</span>
             </h1>
 
@@ -39,9 +39,9 @@ const LandingPage = () => {
             </div>
 
             <p className="text-ink/80 max-w-xl text-lg leading-relaxed sm:text-xl">
-              매일 업데이트되는 글로벌 경제 기사를 통해 트렌드를 파악하고,
-              <br className="hidden sm:block" />
-              실무에 바로 쓸 수 있는 고급 어휘와 표현을 익혀보세요.
+              매일 업데이트되는 글로벌 경제 뉴스를 통해 트렌드를 파악하고
+              <br className="hidden sm:block" /> 초급부터 고급까지, 당신의
+              수준에 맞는 비즈니스 영어를 익혀보세요.
             </p>
 
             <div className="flex justify-center gap-3 font-semibold lg:justify-start">
