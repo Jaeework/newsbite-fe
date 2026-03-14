@@ -100,14 +100,14 @@ const ArticleListPage = () => {
 
         {/* 데이터가 없을떄 (error) 일때 */}
         {error && (
-          <div className="border-border text-ink/50 flex h-40 items-center justify-center rounded-xl border-2 border-dashed font-medium">
+          <div className="border-border text-ink/50 flex h-screen items-center justify-center rounded-xl border-2 border-dashed font-medium">
             {error}
           </div>
         )}
 
         {/* 2. 로딩 상태: 헤더와 검색창은 유지하고 컨텐츠만 스피너로 표시 */}
         {isLoading && !error && (
-          <div className="flex h-60 items-center justify-center">
+          <div className="flex h-screen items-center justify-center">
             <LoadingSpinner size="lg" />
           </div>
         )}
