@@ -1,11 +1,22 @@
 import { useState } from "react";
 import Button from "../../../../components/ui/button/Button";
 import ConfirmModal from "../../../../components/ui/ConfirmModal/ConfirmModal";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import { useAppDispatch, useAppSelector } from "../../../../features/hooks";
+import { useNavigate } from "react-router-dom";
+import { deleteUser } from "../../../../features/user/userSlice";
+import { cn } from "../../../../lib/utils";
 
 const DeleteAccountButton = () => {
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
   const [modalOpen, setIsModalOpen] = useState(false);
-  const isLoading = false;
-  const handleDelete = () => {};
+
+  const handleDelete = () => {
+    dispatch(deleteUser({ navigate }));
+  };
+
   return (
     <>
       <Button
@@ -17,7 +28,14 @@ const DeleteAccountButton = () => {
         disabled={isLoading}
         onClick={() => setIsModalOpen(true)}
       >
-        Delete Account
+        {isLoading && (
+          <span className="absolute inset-0 flex items-center justify-center">
+            <LoadingSpinner size="sm" />
+          </span>
+        )}
+        <span className={cn(isLoading && "invisible")}>
+          <span className="ml-1">Delete Account</span>
+        </span>
       </Button>
       <ConfirmModal
         isOpen={modalOpen}
