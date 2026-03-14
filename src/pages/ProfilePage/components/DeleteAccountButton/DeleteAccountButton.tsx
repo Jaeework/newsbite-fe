@@ -14,7 +14,9 @@ const DeleteAccountButton = () => {
   const [modalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = () => {
-    dispatch(deleteUser({ navigate }));
+    dispatch(deleteUser())
+      .unwrap()
+      .then(() => navigate("/"));
   };
 
   return (
@@ -22,7 +24,7 @@ const DeleteAccountButton = () => {
       <Button
         size="xs"
         radius="xl"
-        variant={isLoading ? "disable" : "link"}
+        variant="link"
         className="order-2 shrink-0 text-sm font-bold transition-colors sm:order-1"
         type="button"
         disabled={isLoading}
